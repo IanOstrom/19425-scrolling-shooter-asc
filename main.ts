@@ -1,3 +1,32 @@
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    spawnBullet()
+})
+function spawnBullet () {
+    projectile = sprites.createProjectileFromSprite(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . e . . . . . . . . 
+        . . . . . . e e e . . . . . . . 
+        . . . . . . e e e . . . . . . . 
+        . . . . . . e e e . . . . . . . 
+        . . . . . . e e e . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, hero, 0, -100)
+    projectile.y = hero.y - 10
+}
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
+    sprites.destroy(sprite, effects.disintegrate, 500)
+    sprites.destroy(otherSprite)
+    info.changeScoreBy(1)
+})
 function spawnPlayer () {
     hero = sprites.create(img`
         .......fc.......
@@ -25,7 +54,7 @@ function spawnPlayer () {
         .......f2c......
         .......ff.......
         `, SpriteKind.Player)
-    hero.scale = 0.75
+    hero.scale = 0.6
     hero.setPosition(76, 91)
     controller.moveSprite(hero)
     hero.setStayInScreen(true)
@@ -57,7 +86,7 @@ function spawnEnemy () {
         ......c55f......
         .......cf.......
         `, SpriteKind.Enemy)
-    badGuy.scale = 0.75
+    badGuy.scale = 0.6
     badGuy.setPosition(randint(0, 160), 0)
     badGuy.setVelocity(0, 50)
 }
@@ -67,6 +96,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
 })
 let badGuy: Sprite = null
 let hero: Sprite = null
+let projectile: Sprite = null
 info.setLife(3)
 scene.setBackgroundImage(img`
     9999999999999999999999999777777777779999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
